@@ -1,6 +1,10 @@
 const multer = require("multer");
 const express = require("express");
-const { createEmployee } = require("../controllers/employeeController");
+const {
+  createEmployee,
+  getEmployee,
+  deleteEmployee,
+} = require("../controllers/employeeController");
 const router = express.Router();
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -28,5 +32,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter });
 
 router.post("/employee", upload.single("picture"), createEmployee);
+router.get("/employee/:id", getEmployee);
+router.delete("/employee/:id", deleteEmployee);
 
 module.exports = router;

@@ -23,6 +23,36 @@ exports.createEmployee = async (req, res) => {
       const message = `Duplicate email entered`;
       return res.status(400).json({ success: false, message: message });
     }
-    res.status(500).send(error);
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+exports.getEmployee = async (req, res) => {
+  try {
+    const employee = await Employee.findById(req.params.id);
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employee not found" });
+    }
+    res.status(200).json({ success: true, message: employee });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error });
+  }
+};
+
+exports.deleteEmployee = async (req, res) => {
+  try {
+    const employee = await Employee.findByIdAndDelete(req.params.id);
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employee not found" });
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "Employee deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error });
   }
 };
