@@ -129,7 +129,9 @@ exports.getEmployees = async (req, res) => {
       .sort(sortQuery)
       .skip(skip)
       .limit(pageSize);
-    res.json({ success: true, employees });
+
+    employeesCount = await Employee.count(query);
+    res.json({ success: true, employees, employeesCount });
   } catch (error) {
     res.status(500).send(error);
   }
