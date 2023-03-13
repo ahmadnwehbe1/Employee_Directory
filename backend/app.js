@@ -3,12 +3,14 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const userRoutes = require("./routes/user");
+const employeeRoutes = require("./routes/employee");
 
 const app = express();
 
 app.use(express.json());
 
 app.use("/", userRoutes);
+app.use("/", employeeRoutes);
 
 const port = process.env.PORT || 8000;
 
