@@ -4,6 +4,7 @@ const {
   createEmployee,
   getEmployee,
   deleteEmployee,
+  updateEmployee,
 } = require("../controllers/employeeController");
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -34,5 +35,6 @@ const upload = multer({ storage, fileFilter });
 router.post("/employee", upload.single("picture"), createEmployee);
 router.get("/employee/:id", getEmployee);
 router.delete("/employee/:id", deleteEmployee);
+router.put("/employee/:id", updateEmployee);
 
 module.exports = router;
