@@ -17,7 +17,7 @@ const sendToken = (user, statusCode, res) => {
   });
 };
 
-exports.registerUser = async (req, res, next) => {
+exports.registerUser = async (req, res) => {
   console.log(req.body);
   try {
     const { name, email, password } = req.body;
@@ -42,7 +42,7 @@ exports.registerUser = async (req, res, next) => {
   }
 };
 
-exports.loginUser = async (req, res, next) => {
+exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -65,5 +65,25 @@ exports.loginUser = async (req, res, next) => {
     sendToken(user, 200, res);
   } catch (error) {
     return res.status(400).json({ error: error.message });
+  }
+};
+
+exports.isAuthencticatedUser = async (req, res, next) => {
+  try {
+    let token = req.header("Authorization");
+    if (!token) {
+      return res.status(401).json({ success: false, message: "Please login" });
+    }
+    token = token.split(" ")[1]; // Extract token from "Bearer token"
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
   }
 };
