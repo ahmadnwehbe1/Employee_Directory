@@ -98,12 +98,12 @@ exports.updateEmployee = async (req, res) => {
 
 exports.getEmployees = async (req, res) => {
   try {
-    const { q, department, sort, page, limit } = req.query;
+    const { q, departments, sort, page, limit } = req.query;
 
     // Set up query
     const query = {};
-    if (department) {
-      query.department = department;
+    if (departments) {
+      query.department = { $in: departments.split(",") };
     }
     if (q) {
       query.$or = [
@@ -112,6 +112,7 @@ exports.getEmployees = async (req, res) => {
         { email: { $regex: q, $options: "i" } },
         { phone: { $regex: q, $options: "i" } },
         { job_title: { $regex: q, $options: "i" } },
+        { department: { $regex: q, $options: "i" } },
       ];
     }
 
@@ -134,5 +135,14 @@ exports.getEmployees = async (req, res) => {
     res.json({ success: true, employees, employeesCount });
   } catch (error) {
     res.status(500).send(error);
+  }
+};
+
+exports.getDepartments = async (req, res) => {
+  try {
+    const departments = await Employee.distinct("department");
+    return res.json({ success: true, departments });
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message });
   }
 };

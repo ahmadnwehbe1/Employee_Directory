@@ -70,9 +70,23 @@ header h1 {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   padding: 20px;
+  height: 100%;
 }
 
 .employee-card .right .right-row {
   text-transform: capitalize;
   margin-bottom: 5px;
+}
+
+.page-item.active .page-link {
+  background-color: #fa9c23;
+  border-color: #fa9c23;
+}
+
+.page-link {
+  color: #fa9c23;
+}
+
+.page-link:hover {
+  color: #fa9c23;
 }
