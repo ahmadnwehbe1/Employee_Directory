@@ -50,6 +50,7 @@ function EmployeeCard({ employee }) {
         <div className="right-row">Email: {`${employee.email}`}</div>
         <div className="right-row">Phone: {`${employee.phone}`}</div>
         <div className="right-row">Department: {`${employee.department}`}</div>
+        <div className="right-row">Address: {`${employee.address}`}</div>
       </div>
     </div>
   );

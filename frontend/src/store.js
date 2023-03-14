@@ -1,9 +1,15 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { employeesReducer } from "./reducers/employeesReducers";
+import {
+  employeesReducer,
+  addEmployeeReducer,
+} from "./reducers/employeesReducers";
 
-const reducer = combineReducers({ employees: employeesReducer });
+const reducer = combineReducers({
+  employees: employeesReducer,
+  addEmployee: addEmployeeReducer,
+});
 
 let initialState = {};
 

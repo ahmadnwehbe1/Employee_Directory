@@ -30,6 +30,10 @@ const employeeSchema = new mongoose.Schema({
     required: [true, "Please enter department"],
     type: String,
   },
+  address: {
+    required: [true, "Please enter an address"],
+    type: String,
+  },
   picture: {
     type: String,
   },

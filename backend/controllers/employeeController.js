@@ -4,6 +4,9 @@ const Employee = require("../models/employee");
 
 exports.createEmployee = async (req, res) => {
   try {
+    if (req.body.first_name) {
+      req.body.first_name = req.body.first_name.toLowerCase();
+    }
     const employee = new Employee(req.body);
 
     // Set picture property to filename if a file was uploaded
@@ -74,6 +77,7 @@ exports.updateEmployee = async (req, res) => {
     employee.phone = req.body.phone || employee.phone;
     employee.job_title = req.body.job_title || employee.job_title;
     employee.department = req.body.department || employee.department;
+    employee.address = req.body.address || employee.address;
 
     // Set picture property to filename if a file was uploaded
     if (req.file) {
@@ -113,6 +117,7 @@ exports.getEmployees = async (req, res) => {
         { phone: { $regex: q, $options: "i" } },
         { job_title: { $regex: q, $options: "i" } },
         { department: { $regex: q, $options: "i" } },
+        { address: { $regex: q, $options: "i" } },
       ];
     }
 
