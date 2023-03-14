@@ -4,30 +4,34 @@ import { getDepartments, getEmployees } from "../actions/employeesActions";
 import EmployeeCard from "../components/EmployeeCard";
 import Pagination from "react-js-pagination";
 import Select from "react-select";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Dashboard() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDepartments, setSelectedDepartments] = useState("");
+  const [sort, setSort] = useState("asc");
 
   const { loading, employees, employeesCount, departments } = useSelector(
     (state) => state.employees
   );
 
   useEffect(() => {
-    dispatch(
-      getEmployees(
-        search,
-        currentPage,
-        selectedDepartments,
-        selectedDepartments
-      )
-    );
+    dispatch(getEmployees(search, currentPage, selectedDepartments, sort));
     dispatch(getDepartments());
-  }, [dispatch, search, currentPage, selectedDepartments]);
+  }, [dispatch, search, currentPage, selectedDepartments, sort]);
   const setCurrentpageNo = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const changeSort = () => {
+    if (sort === "asc") {
+      setSort("desc");
+    } else {
+      setSort("asc");
+    }
   };
 
   const selectDepartment = (e) => {
@@ -43,28 +47,37 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <input
-        placeholder="Search..."
-        value={search}
-        style={{
-          height: "30px",
-          width: "200px",
-          outline: "none",
-          border: "none",
-          borderRadius: "5px",
-          marginBottom: "20px",
-        }}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <Select
-        isMulti
-        name="colors"
-        options={departments}
-        className="basic-multi-select"
-        classNamePrefix="select"
-        onChange={selectDepartment}
-        placeholder="Select Department"
-      />
+      <div className="search-department">
+        <input
+          placeholder="Search..."
+          value={search}
+          style={{
+            height: "38px",
+            width: "48%",
+            outline: "none",
+            border: "none",
+            borderRadius: "5px",
+            textIndent: "10px",
+          }}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Select
+          isMulti
+          name="colors"
+          options={departments}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          onChange={selectDepartment}
+          placeholder="Select Department"
+        />
+        <div className="sortBy" onClick={changeSort}>
+          Sort{" "}
+          <FontAwesomeIcon
+            icon={sort === "asc" ? faArrowUp : faArrowDown}
+            color="blue"
+          />
+        </div>
+      </div>
 
       <div className="number">Employees found: {employeesCount}</div>
       <div className="employees-container">

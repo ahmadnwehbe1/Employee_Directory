@@ -6,7 +6,7 @@ function Navbar() {
   return (
     <header>
       <h1>Employee Directory</h1>
-      <FontAwesomeIcon icon={faUsersBetweenLines} size="2x" />
+      <FontAwesomeIcon icon={faUsersBetweenLines} size="2x" color="blue" />
     </header>
   );
 }
