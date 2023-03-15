@@ -194,6 +194,7 @@ exports.seedEmployees = async (req, res) => {
       let employee = {
         first_name: result.name.first,
         last_name: result.name.last,
+        full_name: `${result.name.first} ${result.name.last}`,
         email: result.email,
         phone: result.phone,
         address: result.location.street.name,

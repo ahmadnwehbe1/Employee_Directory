@@ -9,6 +9,7 @@ const {
   getDepartments,
   seedEmployees,
 } = require("../controllers/employeeController");
+const Employee = require("../models/employee");
 const router = express.Router();
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
