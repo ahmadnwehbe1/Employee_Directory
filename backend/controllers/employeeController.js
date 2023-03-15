@@ -1,4 +1,5 @@
 const Employee = require("../models/employee");
+const axios = require("axios");
 
 // Set up multer storage and file filter
 
@@ -108,6 +109,7 @@ exports.updateEmployee = async (req, res) => {
 
 exports.getEmployees = async (req, res) => {
   try {
+    const totalCount = await Employee.countDocuments();
     const { q, departments, sort, page, limit } = req.query;
 
     // Set up query
@@ -144,7 +146,7 @@ exports.getEmployees = async (req, res) => {
       .limit(pageSize);
 
     employeesCount = await Employee.count(query);
-    res.json({ success: true, employees, employeesCount });
+    res.json({ success: true, employees, employeesCount, totalCount });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -157,4 +159,63 @@ exports.getDepartments = async (req, res) => {
   } catch (error) {
     return res.status(400).json({ success: false, message: error.message });
   }
+};
+
+exports.seedEmployees = async (req, res) => {
+  let { data } = await axios.get(
+    "https://randomuser.me/api/?results=100&nat=us"
+  );
+  let employees = [];
+  const departments = [
+    "Marketing",
+    "Human Resources",
+    "Accounting",
+    "Sales",
+    "Information Technology",
+    "Research and Development",
+    "Customer Service",
+    "Operations",
+  ];
+
+  const jobTitles = [
+    "Software Developer",
+    "Marketing Coordinator",
+    "Human Resources Specialist",
+    "Accountant",
+    "Sales Representative",
+    "IT Manager",
+    "Research Analyst",
+    "Customer Service Representative",
+    "Operations Manager",
+  ];
+
+  await Promise.all(
+    data.results.map(async (result) => {
+      let employee = {
+        first_name: result.name.first,
+        last_name: result.name.last,
+        email: result.email,
+        phone: result.phone,
+        address: result.location.street.name,
+        picture: result.picture.medium,
+        department: departments[Math.floor(Math.random() * departments.length)],
+        job_title: jobTitles[Math.floor(Math.random() * jobTitles.length)],
+      };
+      employees.push(employee);
+    })
+  );
+
+  Employee.insertMany(employees)
+    .then((docs) => {
+      return res.json({
+        success: true,
+        message: `${docs.length} employees inserted`,
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json({
+        success: true,
+        message: "Unable to insert employees",
+      });
+    });
 };

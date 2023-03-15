@@ -210,3 +210,8 @@ button {
   display: flex;
   justify-content: space-between;
 }
+
+.import-btn {
+  background-color: #dcffff;
+  outline: none !important;
+}

@@ -76,13 +76,11 @@ const EmployeeForm = ({ employee }) => {
 
     if (message) {
       dispatch(clearEmployeeMessages());
-      dispatch(clearDeleteErrors());
 
       navigate("/");
     }
     if (messageDelete) {
       dispatch(clearDeleteErrors());
-      dispatch(clearEmployeeMessages());
       navigate("/");
     }
   }, [

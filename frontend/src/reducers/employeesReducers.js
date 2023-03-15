@@ -33,6 +33,7 @@ export const employeesReducer = (state = { employees: [] }, action) => {
         loading: false,
         employees: action.payload.employees,
         employeesCount: action.payload.employeesCount,
+        totalCount: action.payload.totalCount,
       };
 
     case GET_DEPARTMENTS_REQUEST:

@@ -7,6 +7,7 @@ const {
   updateEmployee,
   getEmployees,
   getDepartments,
+  seedEmployees,
 } = require("../controllers/employeeController");
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -40,5 +41,6 @@ router.delete("/employee/:id", deleteEmployee);
 router.put("/employee/:id", upload.single("picture"), updateEmployee);
 router.get("/employees", getEmployees);
 router.get("/departments", getDepartments);
+router.get("/seed", seedEmployees);
 
 module.exports = router;
