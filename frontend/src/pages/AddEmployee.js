@@ -4,7 +4,7 @@ import EmployeeForm from "../components/EmployeeForm";
 const AddEmployee = () => {
   return (
     <div>
-      <EmployeeForm />
+      <EmployeeForm mode="new" />
     </div>
   );
 };

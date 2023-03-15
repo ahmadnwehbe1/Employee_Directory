@@ -14,7 +14,7 @@ function Dashboard() {
   const [selectedDepartments, setSelectedDepartments] = useState("");
   const [sort, setSort] = useState("asc");
 
-  const { loading, employees, employeesCount, departments } = useSelector(
+  const { employees, employeesCount, departments } = useSelector(
     (state) => state.employees
   );
 
@@ -43,6 +43,7 @@ function Dashboard() {
           : element.value
       );
     });
+    setCurrentPage(1);
   };
 
   return (
@@ -59,7 +60,10 @@ function Dashboard() {
             borderRadius: "5px",
             textIndent: "10px",
           }}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setCurrentPage(1);
+            setSearch(e.target.value);
+          }}
         />
         <Select
           isMulti
@@ -85,12 +89,12 @@ function Dashboard() {
           <EmployeeCard key={employee._id} employee={employee} />
         ))}
       </div>
-      {10 <= employeesCount && (
+      {9 <= employeesCount && (
         <div className="d-flex justify-content-center mt-5">
           <Pagination
             activePage={currentPage}
-            itemsCountPerPage={1}
-            totalItemsCount={10}
+            itemsCountPerPage={9}
+            totalItemsCount={employeesCount}
             onChange={setCurrentpageNo}
             nextPageText={"Next"}
             prevPageText={"Prev"}

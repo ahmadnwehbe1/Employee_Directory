@@ -9,6 +9,9 @@ const employeeSchema = new mongoose.Schema({
     required: [true, "Please enter last name"],
     type: String,
   },
+  full_name: {
+    type: String,
+  },
   email: {
     required: [true, "Please enter email address"],
     type: String,

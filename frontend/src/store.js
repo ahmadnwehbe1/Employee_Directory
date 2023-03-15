@@ -4,11 +4,15 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   employeesReducer,
   addEmployeeReducer,
+  getEmployeeReducer,
+  deleteEmployeeReducer,
 } from "./reducers/employeesReducers";
 
 const reducer = combineReducers({
   employees: employeesReducer,
   addEmployee: addEmployeeReducer,
+  employee: getEmployeeReducer,
+  deleteEmployee: deleteEmployeeReducer,
 });
 
 let initialState = {};

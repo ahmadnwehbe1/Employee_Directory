@@ -7,6 +7,12 @@ exports.createEmployee = async (req, res) => {
     if (req.body.first_name) {
       req.body.first_name = req.body.first_name.toLowerCase();
     }
+    if (req.body.first_name && req.body.last_name) {
+      req.body.full_name =
+        req.body.first_name.toLowerCase() +
+        " " +
+        req.body.last_name.toLowerCase();
+    }
     const employee = new Employee(req.body);
 
     // Set picture property to filename if a file was uploaded
@@ -113,6 +119,7 @@ exports.getEmployees = async (req, res) => {
       query.$or = [
         { first_name: { $regex: q, $options: "i" } },
         { last_name: { $regex: q, $options: "i" } },
+        { full_name: { $regex: q, $options: "i" } },
         { email: { $regex: q, $options: "i" } },
         { phone: { $regex: q, $options: "i" } },
         { job_title: { $regex: q, $options: "i" } },
@@ -128,7 +135,7 @@ exports.getEmployees = async (req, res) => {
     }
 
     const pageNumber = parseInt(page) || 1;
-    const pageSize = parseInt(limit) || 10;
+    const pageSize = parseInt(limit) || 9;
     const skip = (pageNumber - 1) * pageSize;
 
     const employees = await Employee.find(query)

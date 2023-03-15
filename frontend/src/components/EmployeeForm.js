@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   addEmployee,
+  clearDeleteErrors,
   clearEmployeeMessages,
+  deleteEmployee,
+  editEmployee,
 } from "../actions/employeesActions";
 
-const EmployeeForm = () => {
+const EmployeeForm = ({ employee }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  let { id } = useParams();
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -16,10 +20,17 @@ const EmployeeForm = () => {
     phone: "",
     job_title: "",
     department: "",
+    address: "",
     picture: null,
   });
 
   const { loading, message, error } = useSelector((state) => state.addEmployee);
+
+  const {
+    loading: loadingDelete,
+    message: messageDelete,
+    error: errorDelete,
+  } = useSelector((state) => state.deleteEmployee);
 
   const handleInputChange = (event) => {
     setFormData({
@@ -34,16 +45,55 @@ const EmployeeForm = () => {
     });
   };
 
+  const deleteCLick = () => {
+    if (
+      window.confirm("Are you sure you want to delete this employee?") === true
+    ) {
+      dispatch(deleteEmployee(id));
+    }
+  };
+
   useEffect(() => {
+    if (employee) {
+      setFormData({
+        first_name: employee.first_name,
+        last_name: employee.last_name,
+        email: employee.email,
+        phone: employee.phone,
+        job_title: employee.job_title,
+        department: employee.department,
+        address: employee.address,
+        picture: null,
+      });
+    }
     if (error) {
       alert(error);
     }
 
+    if (errorDelete) {
+      alert(errorDelete);
+    }
+
     if (message) {
+      dispatch(clearEmployeeMessages());
+      dispatch(clearDeleteErrors());
+
+      navigate("/");
+    }
+    if (messageDelete) {
+      dispatch(clearDeleteErrors());
       dispatch(clearEmployeeMessages());
       navigate("/");
     }
-  }, [error, message, navigate]);
+  }, [
+    error,
+    message,
+    navigate,
+    dispatch,
+    employee,
+    errorDelete,
+    messageDelete,
+  ]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -56,30 +106,19 @@ const EmployeeForm = () => {
     form.append("job_title", formData.job_title);
     form.append("department", formData.department);
     form.append("address", formData.address);
+    console.log(formData);
     if (formData.picture) {
       form.append("picture", formData.picture);
     }
-    dispatch(addEmployee(form));
-
-    // try {
-    //   const response = await axios.post("/employees", form);
-    //   setFormData({
-    //     first_name: "",
-    //     last_name: "",
-    //     email: "",
-    //     phone: "",
-    //     job_title: "",
-    //     department: "",
-    //     picture: null,
-    //   });
-    //   setSuccessMessage("Employee created successfully");
-    // } catch (error) {
-    //   if (error.response.data.errors) {
-    //     setErrorMessage(error.response.data.errors.join(", "));
-    //   } else {
-    //     setErrorMessage("Failed to create employee");
-    //   }
-    // }
+    for (var pair of form.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+    if (!employee) {
+      dispatch(addEmployee(form));
+    }
+    if (employee) {
+      dispatch(editEmployee(formData, id));
+    }
   };
   return (
     <div className="employee-form">
@@ -197,7 +236,20 @@ const EmployeeForm = () => {
             />
           </div>
         </div>
-        <button type="submit">Submit</button>
+        <div className="form-btns">
+          <button type="submit" disabled={loading || loadingDelete}>
+            Save
+          </button>
+          {employee && (
+            <button
+              style={{ backgroundColor: "red", color: "white" }}
+              disabled={loading || loadingDelete}
+              onClick={deleteCLick}
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );

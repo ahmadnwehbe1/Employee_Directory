@@ -37,7 +37,7 @@ const upload = multer({ storage, fileFilter });
 router.post("/employee", upload.single("picture"), createEmployee);
 router.get("/employee/:id", getEmployee);
 router.delete("/employee/:id", deleteEmployee);
-router.put("/employee/:id", updateEmployee);
+router.put("/employee/:id", upload.single("picture"), updateEmployee);
 router.get("/employees", getEmployees);
 router.get("/departments", getDepartments);
 

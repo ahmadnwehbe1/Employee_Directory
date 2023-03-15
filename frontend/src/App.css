@@ -40,6 +40,7 @@ header h1 {
   border: 2px solid gray;
   cursor: pointer;
   transition: 0.3s all;
+  height: 100%;
 }
 
 .employee-card:hover {
@@ -193,4 +194,19 @@ header h1 {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+button {
+  background-color: #87cefa;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  padding: 8px 20px;
+  color: blue;
+  font-size: 20px;
+}
+
+.form-btns {
+  display: flex;
+  justify-content: space-between;
 }
